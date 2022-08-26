@@ -10,4 +10,3 @@ struct __SDEVICE_RUNTIME_DATA(TableCrc8)
 };
 
 __SDEVICE_HANDLE_DEFINITION(TableCrc8);
-
