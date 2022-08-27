@@ -45,9 +45,6 @@ __SDEVICE_CREATE_HANDLE_DECLARATION(TableCrc8, _init, _context, index)
 
    __SDEVICE_HANDLE(TableCrc8) *handle = SDeviceMalloc(sizeof(__SDEVICE_HANDLE(TableCrc8)));
 
-   if(handle == NULL)
-      return NULL;
-
    handle->Header = (SDeviceHandleHeader){ _context, TABLE_CRC8_SDEVICE_STATUS_OK, index };
    handle->Init = *init;
 
@@ -58,13 +55,6 @@ __SDEVICE_CREATE_HANDLE_DECLARATION(TableCrc8, _init, _context, index)
    else
    {
       uint8_t *lookupTable = SDeviceMalloc(sizeof(uint8_t) * __LOOKUP_TABLE_LENGTH);
-
-      if(lookupTable == NULL)
-      {
-         SDeviceFree(handle);
-         return NULL;
-      }
-
       GenerateCrc8Table(init->Polynomial, init->IsReverse, lookupTable);
       handle->Runtime.LookupTable = lookupTable;
    }
