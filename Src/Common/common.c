@@ -2,7 +2,7 @@
 
 #include <limits.h>
 
-uint32_t ReverseUInt32Bits(uint32_t value)
+uint32_t TableCrcSDeviceReverseUInt32Bits(uint32_t value)
 {
    uint32_t mask;
 
@@ -24,12 +24,12 @@ uint32_t ReverseUInt32Bits(uint32_t value)
    return value;
 }
 
-uint16_t ReverseUInt16Bits(uint16_t value)
+uint16_t TableCrcSDeviceReverseUInt16Bits(uint16_t value)
 {
-   return ReverseUInt32Bits(value) >> CHAR_BIT * (sizeof(uint32_t) - sizeof(uint16_t));
+   return TableCrcSDeviceReverseUInt32Bits(value) >> CHAR_BIT * (sizeof(uint32_t) - sizeof(uint16_t));
 }
 
-uint8_t ReverseUInt8Bits(uint8_t value)
+uint8_t TableCrcSDeviceReverseUInt8Bits(uint8_t value)
 {
-   return ReverseUInt32Bits(value) >> CHAR_BIT * (sizeof(uint32_t) - sizeof(uint8_t));
+   return TableCrcSDeviceReverseUInt32Bits(value) >> CHAR_BIT * (sizeof(uint32_t) - sizeof(uint8_t));
 }

@@ -6,7 +6,7 @@ bool TestTableCrc8SDeviceCrc8(void)
 {
    __SDEVICE_INIT_DATA(TableCrc8) init = { NULL, 0x07, 0x00, 0x00, false };
    __attribute__((cleanup(__SDEVICE_DISPOSE_HANDLE(TableCrc8)))) __SDEVICE_HANDLE(TableCrc8) *handle =
-            __SDEVICE_CREATE_HANDLE(TableCrc8)(&init, NULL, 0);
+            __SDEVICE_CREATE_HANDLE(TableCrc8)(&init, NULL, NULL);
 
    uint8_t crc;
 
@@ -23,7 +23,7 @@ bool TestTableCrc8SDeviceEbu(void)
 {
    __SDEVICE_INIT_DATA(TableCrc8) init = { NULL, 0x1D, 0xFF, 0x00, true };
    __attribute__((cleanup(__SDEVICE_DISPOSE_HANDLE(TableCrc8)))) __SDEVICE_HANDLE(TableCrc8) *handle =
-            __SDEVICE_CREATE_HANDLE(TableCrc8)(&init, NULL, 0);
+            __SDEVICE_CREATE_HANDLE(TableCrc8)(&init, NULL, NULL);
 
    uint8_t crc;
 
@@ -40,7 +40,7 @@ bool TestTableCrc8SDeviceItu(void)
 {
    __SDEVICE_INIT_DATA(TableCrc8) init = { NULL, 0x07, 0x00, 0x55, false };
    __attribute__((cleanup(__SDEVICE_DISPOSE_HANDLE(TableCrc8)))) __SDEVICE_HANDLE(TableCrc8) *handle =
-            __SDEVICE_CREATE_HANDLE(TableCrc8)(&init, NULL, 0);
+            __SDEVICE_CREATE_HANDLE(TableCrc8)(&init, NULL, NULL);
 
    uint8_t crc;
 
