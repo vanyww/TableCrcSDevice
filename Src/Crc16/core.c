@@ -106,6 +106,9 @@ uint16_t TableCrc16SDeviceUpdate(__SDEVICE_HANDLE(TableCrc16) *handle, uint16_t 
    SDeviceAssert(handle != NULL);
    SDeviceAssert(data != NULL);
 
+   if(size == 0)
+      return crc;
+
    crc = handle->Runtime.UpdateFunction(handle->Runtime.LookupTable, crc ^ handle->Init.OutputXorValue, data, size);
    return crc ^ handle->Init.OutputXorValue;
 }
@@ -114,6 +117,9 @@ uint16_t TableCrc16SDeviceCompute(__SDEVICE_HANDLE(TableCrc16) *handle, const vo
 {
    SDeviceAssert(handle != NULL);
    SDeviceAssert(data != NULL);
+
+   if(size == 0)
+      return handle->Init.InitialValue;
 
    uint16_t crc = handle->Runtime.UpdateFunction(handle->Runtime.LookupTable, handle->Init.InitialValue, data, size);
    return crc ^ handle->Init.OutputXorValue;

@@ -91,6 +91,9 @@ uint8_t TableCrc8SDeviceUpdate(__SDEVICE_HANDLE(TableCrc8) *handle, uint8_t crc,
    SDeviceAssert(handle != NULL);
    SDeviceAssert(data != NULL);
 
+   if(size == 0)
+      return crc;
+
    crc = UpdateCrc8(handle->Runtime.LookupTable, crc ^ handle->Init.OutputXorValue, data, size);
    return crc ^ handle->Init.OutputXorValue;
 }
@@ -99,6 +102,9 @@ uint8_t TableCrc8SDeviceCompute(__SDEVICE_HANDLE(TableCrc8) *handle, const void 
 {
    SDeviceAssert(handle != NULL);
    SDeviceAssert(data != NULL);
+
+   if(size == 0)
+      return handle->Init.InitialValue;
 
    uint8_t crc = UpdateCrc8(handle->Runtime.LookupTable, handle->Init.InitialValue, data, size);
    return crc ^ handle->Init.OutputXorValue;
