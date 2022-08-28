@@ -39,10 +39,9 @@ static uint8_t UpdateCrc8(const uint8_t *lookupTable, uint8_t crc, const void *d
 
 __SDEVICE_CREATE_HANDLE_DECLARATION(TableCrc8, _init, _context, index)
 {
+   SDeviceAssert(_init != NULL);
+
    __SDEVICE_INIT_DATA(TableCrc8) *init = _init;
-
-   SDeviceAssert(init != NULL);
-
    __SDEVICE_HANDLE(TableCrc8) *handle = SDeviceMalloc(sizeof(__SDEVICE_HANDLE(TableCrc8)));
 
    handle->Header = (SDeviceHandleHeader){ _context, TABLE_CRC8_SDEVICE_STATUS_OK, index };

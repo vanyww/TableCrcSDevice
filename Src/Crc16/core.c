@@ -52,10 +52,9 @@ static uint16_t UpdateReverseCrc16(const uint16_t *lookupTable, uint16_t crc, co
 
 __SDEVICE_CREATE_HANDLE_DECLARATION(TableCrc16, _init, _context, index)
 {
+   SDeviceAssert(_init != NULL);
+
    __SDEVICE_INIT_DATA(TableCrc16) *init = _init;
-
-   SDeviceAssert(init != NULL);
-
    __SDEVICE_HANDLE(TableCrc16) *handle = SDeviceMalloc(sizeof(__SDEVICE_HANDLE(TableCrc16)));
 
    handle->Header = (SDeviceHandleHeader){ _context, TABLE_CRC16_SDEVICE_STATUS_OK, index };
