@@ -13,12 +13,12 @@ static void GenerateCrc8Table(uint8_t polynomial, bool isReverse, uint8_t *looku
 {
    for(size_t byteValue = 0; byteValue < __LOOKUP_TABLE_LENGTH; byteValue++)
    {
-      uint8_t crc = (isReverse == true) ? ReverseUInt8Bits(byteValue) : byteValue;
+      uint8_t crc = (isReverse == true) ? TableCrcSDeviceReverseUInt8Bits(byteValue) : byteValue;
 
       for(size_t bit = 0; bit < CHAR_BIT; bit++)
          crc = (__UINT8_MSB(crc) != 0) ? (crc << 1) ^ polynomial : crc << 1;
 
-      lookupTable[byteValue] = (isReverse == true) ? ReverseUInt8Bits(crc) : crc;
+      lookupTable[byteValue] = (isReverse == true) ? TableCrcSDeviceReverseUInt8Bits(crc) : crc;
    }
 }
 
