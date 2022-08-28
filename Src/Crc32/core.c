@@ -85,8 +85,12 @@ __SDEVICE_CREATE_HANDLE_DECLARATION(TableCrc32, _init, _context, _outerNameNode)
 
 __SDEVICE_DISPOSE_HANDLE_DECLARATION(TableCrc32, _handlePointer)
 {
+   SDeviceAssert(_handlePointer != NULL);
+
    __SDEVICE_HANDLE(TableCrc32) **handlePointer = _handlePointer;
    __SDEVICE_HANDLE(TableCrc32) *handle = *handlePointer;
+
+   SDeviceAssert(handle != NULL);
 
    if(handle->Init.ExternalLookupTable == NULL)
       SDeviceFree((void *)handle->Runtime.LookupTable);
@@ -99,12 +103,24 @@ __SDEVICE_DISPOSE_HANDLE_DECLARATION(TableCrc32, _handlePointer)
 
 uint32_t TableCrc32SDeviceUpdate(__SDEVICE_HANDLE(TableCrc32) *handle, uint32_t crc, const void *data, size_t size)
 {
+   SDeviceAssert(handle != NULL);
+   SDeviceAssert(data != NULL);
+
+   if(size == 0)
+      return crc;
+
    crc = handle->Runtime.UpdateFunction(handle->Runtime.LookupTable, crc ^ handle->Init.OutputXorValue, data, size);
    return crc ^ handle->Init.OutputXorValue;
 }
 
 uint32_t TableCrc32SDeviceCompute(__SDEVICE_HANDLE(TableCrc32) *handle, const void *data, size_t size)
 {
+   SDeviceAssert(handle != NULL);
+   SDeviceAssert(data != NULL);
+
+   if(size == 0)
+      return handle->Init.InitialValue;
+
    uint32_t crc = handle->Runtime.UpdateFunction(handle->Runtime.LookupTable, handle->Init.InitialValue, data, size);
    return crc ^ handle->Init.OutputXorValue;
 }
