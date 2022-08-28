@@ -9,6 +9,8 @@
 #define __LOOKUP_TABLE_LENGTH 256
 #define __UINT8_MSB(value) (value & 0x80)
 
+static const char DeviceName[] = "TableCrc8\0";
+
 static void GenerateCrc8Table(uint8_t polynomial, bool isReverse, uint8_t *lookupTable)
 {
    for(size_t byteValue = 0; byteValue < __LOOKUP_TABLE_LENGTH; byteValue++)
@@ -37,15 +39,20 @@ static uint8_t UpdateCrc8(const uint8_t *lookupTable, uint8_t crc, const void *d
 
 /**********************************************************************************************************************/
 
-__SDEVICE_CREATE_HANDLE_DECLARATION(TableCrc8, _init, _context, index)
+__SDEVICE_CREATE_HANDLE_DECLARATION(TableCrc8, _init, _context, _outerNameNode)
 {
    SDeviceAssert(_init != NULL);
 
    __SDEVICE_INIT_DATA(TableCrc8) *init = _init;
    __SDEVICE_HANDLE(TableCrc8) *handle = SDeviceMalloc(sizeof(__SDEVICE_HANDLE(TableCrc8)));
 
-   handle->Header = (SDeviceHandleHeader){ _context, TABLE_CRC8_SDEVICE_STATUS_OK, index };
    handle->Init = *init;
+   handle->Header = (SDeviceHandleHeader)
+   {
+      .Context = _context,
+      .NameNode = { .Name = DeviceName, .OuterNode = _outerNameNode },
+      .LatestStatus = TABLE_CRC8_SDEVICE_STATUS_OK
+   };
 
    if(init->ExternalLookupTable != NULL)
    {
