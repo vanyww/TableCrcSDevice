@@ -23,6 +23,8 @@ struct __SDEVICE_INIT_DATA(TableCrc32)
    bool IsReverse;
 };
 
+__SDEVICE_STRING_NAME_DECLARATION(TableCrc32);
+
 __SDEVICE_CREATE_HANDLE_DECLARATION(TableCrc32, _init, _context, _outerNameNode);
 __SDEVICE_DISPOSE_HANDLE_DECLARATION(TableCrc32, _handlePointer);
 

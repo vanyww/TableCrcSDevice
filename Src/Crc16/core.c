@@ -9,8 +9,6 @@
 #define __LOOKUP_TABLE_LENGTH 256
 #define __UINT16_MSB(value) (value & 0x8000)
 
-static const char DeviceName[] = "TableCrc16\0";
-
 static void GenerateCrc16Table(uint16_t polynomial, bool isReverse, uint16_t *lookupTable)
 {
    for(size_t byteValue = 0; byteValue < __LOOKUP_TABLE_LENGTH; byteValue++)
@@ -52,6 +50,8 @@ static uint16_t UpdateReverseCrc16(const uint16_t *lookupTable, uint16_t crc, co
 
 /**********************************************************************************************************************/
 
+__SDEVICE_STRING_NAME_DEFINITION(TableCrc16);
+
 __SDEVICE_CREATE_HANDLE_DECLARATION(TableCrc16, _init, _context, _outerNameNode)
 {
    SDeviceAssert(_init != NULL);
@@ -63,7 +63,7 @@ __SDEVICE_CREATE_HANDLE_DECLARATION(TableCrc16, _init, _context, _outerNameNode)
    handle->Header = (SDeviceHandleHeader)
    {
       .Context = _context,
-      .NameNode = { .Name = DeviceName, .OuterNode = _outerNameNode },
+      .NameNode = { .Name = __SDEVICE_STRING_NAME(TableCrc16), .OuterNode = _outerNameNode },
       .LatestStatus = TABLE_CRC16_SDEVICE_STATUS_OK
    };
 
