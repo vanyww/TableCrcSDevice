@@ -4,7 +4,7 @@
 
 /* version ************************************************************************************************************/
 
-#if (__SDEVICE_CORE_VERSION_MAJOR != 3) || (__SDEVICE_CORE_VERSION_MINOR < 0)
+#if (__SDEVICE_CORE_VERSION_MAJOR != 4) || (__SDEVICE_CORE_VERSION_MINOR < 0)
 #error SDevice core version is incorrect.
 #endif
 
