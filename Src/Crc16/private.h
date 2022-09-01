@@ -10,4 +10,4 @@ struct __SDEVICE_RUNTIME_DATA(TableCrc16)
    const uint16_t *LookupTable;
 };
 
-__SDEVICE_HANDLE_DEFINITION(TableCrc16);
+__SDEVICE_HANDLE_DECLARATION(TableCrc16);
