@@ -89,10 +89,11 @@ __SDEVICE_DISPOSE_HANDLE_DECLARATION(TableCrc8, _handlePointer)
 uint8_t TableCrc8SDeviceUpdate(__SDEVICE_HANDLE(TableCrc8) *handle, uint8_t crc, const void *data, size_t size)
 {
    SDeviceAssert(handle != NULL);
-   SDeviceAssert(data != NULL);
 
    if(size == 0)
       return crc;
+
+   SDeviceAssert(data != NULL);
 
    crc = UpdateCrc8(handle->Runtime.LookupTable, crc ^ handle->Init.OutputXorValue, data, size);
    return crc ^ handle->Init.OutputXorValue;
@@ -101,10 +102,11 @@ uint8_t TableCrc8SDeviceUpdate(__SDEVICE_HANDLE(TableCrc8) *handle, uint8_t crc,
 uint8_t TableCrc8SDeviceCompute(__SDEVICE_HANDLE(TableCrc8) *handle, const void *data, size_t size)
 {
    SDeviceAssert(handle != NULL);
-   SDeviceAssert(data != NULL);
 
    if(size == 0)
       return handle->Init.InitialValue;
+
+   SDeviceAssert(data != NULL);
 
    uint8_t crc = UpdateCrc8(handle->Runtime.LookupTable, handle->Init.InitialValue, data, size);
    return crc ^ handle->Init.OutputXorValue;
