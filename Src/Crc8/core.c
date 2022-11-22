@@ -4,8 +4,6 @@
 #include "SDeviceCore/errors.h"
 #include "SDeviceCore/heap.h"
 
-#include <limits.h>
-
 #define __LOOKUP_TABLE_LENGTH 256
 #define __UINT8_MSB(value) (value & 0x80)
 
@@ -13,12 +11,12 @@ static void GenerateCrc8Table(uint8_t polynomial, bool isReverse, uint8_t *looku
 {
    for(size_t byteValue = 0; byteValue < __LOOKUP_TABLE_LENGTH; byteValue++)
    {
-      uint8_t crc = (isReverse == true) ? TableCrcSDeviceReverseUInt8Bits(byteValue) : byteValue;
+      uint8_t crc = isReverse ? TableCrcSDeviceReverseUInt8Bits(byteValue) : byteValue;
 
       for(size_t bit = 0; bit < CHAR_BIT; bit++)
          crc = (__UINT8_MSB(crc) != 0) ? (crc << 1) ^ polynomial : crc << 1;
 
-      lookupTable[byteValue] = (isReverse == true) ? TableCrcSDeviceReverseUInt8Bits(crc) : crc;
+      lookupTable[byteValue] = isReverse ? TableCrcSDeviceReverseUInt8Bits(crc) : crc;
    }
 }
 
@@ -89,10 +87,11 @@ __SDEVICE_DISPOSE_HANDLE_DECLARATION(TableCrc8, _handlePointer)
 uint8_t TableCrc8SDeviceUpdate(__SDEVICE_HANDLE(TableCrc8) *handle, uint8_t crc, const void *data, size_t size)
 {
    SDeviceAssert(handle != NULL);
-   SDeviceAssert(data != NULL);
 
    if(size == 0)
       return crc;
+
+   SDeviceAssert(data != NULL);
 
    crc = UpdateCrc8(handle->Runtime.LookupTable, crc ^ handle->Init.OutputXorValue, data, size);
    return crc ^ handle->Init.OutputXorValue;
@@ -101,10 +100,11 @@ uint8_t TableCrc8SDeviceUpdate(__SDEVICE_HANDLE(TableCrc8) *handle, uint8_t crc,
 uint8_t TableCrc8SDeviceCompute(__SDEVICE_HANDLE(TableCrc8) *handle, const void *data, size_t size)
 {
    SDeviceAssert(handle != NULL);
-   SDeviceAssert(data != NULL);
 
    if(size == 0)
       return handle->Init.InitialValue;
+
+   SDeviceAssert(data != NULL);
 
    uint8_t crc = UpdateCrc8(handle->Runtime.LookupTable, handle->Init.InitialValue, data, size);
    return crc ^ handle->Init.OutputXorValue;

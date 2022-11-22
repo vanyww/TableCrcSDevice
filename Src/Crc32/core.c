@@ -4,8 +4,6 @@
 #include "SDeviceCore/errors.h"
 #include "SDeviceCore/heap.h"
 
-#include <limits.h>
-
 #define __LOOKUP_TABLE_LENGTH 256
 #define __UINT32_MSB(value) (value & 0x80000000)
 
@@ -13,12 +11,12 @@ static void GenerateCrc32Table(uint32_t polynomial, bool isReverse, uint32_t *lo
 {
    for(size_t byteValue = 0; byteValue < __LOOKUP_TABLE_LENGTH; byteValue++)
    {
-      uint32_t crc = (isReverse == true) ? TableCrcSDeviceReverseUInt32Bits(byteValue) : ((uint32_t)byteValue) << 24;
+      uint32_t crc = isReverse ? TableCrcSDeviceReverseUInt32Bits(byteValue) : ((uint32_t)byteValue) << 24;
 
       for(size_t bit = 0; bit < CHAR_BIT; bit++)
          crc = (__UINT32_MSB(crc) != 0) ? (crc << 1) ^ polynomial : crc << 1;
 
-      lookupTable[byteValue] = (isReverse == true) ? TableCrcSDeviceReverseUInt32Bits(crc) : crc;
+      lookupTable[byteValue] = isReverse ? TableCrcSDeviceReverseUInt32Bits(crc) : crc;
    }
 }
 
@@ -104,10 +102,11 @@ __SDEVICE_DISPOSE_HANDLE_DECLARATION(TableCrc32, _handlePointer)
 uint32_t TableCrc32SDeviceUpdate(__SDEVICE_HANDLE(TableCrc32) *handle, uint32_t crc, const void *data, size_t size)
 {
    SDeviceAssert(handle != NULL);
-   SDeviceAssert(data != NULL);
 
    if(size == 0)
       return crc;
+
+   SDeviceAssert(data != NULL);
 
    crc = handle->Runtime.UpdateFunction(handle->Runtime.LookupTable, crc ^ handle->Init.OutputXorValue, data, size);
    return crc ^ handle->Init.OutputXorValue;
@@ -116,10 +115,11 @@ uint32_t TableCrc32SDeviceUpdate(__SDEVICE_HANDLE(TableCrc32) *handle, uint32_t 
 uint32_t TableCrc32SDeviceCompute(__SDEVICE_HANDLE(TableCrc32) *handle, const void *data, size_t size)
 {
    SDeviceAssert(handle != NULL);
-   SDeviceAssert(data != NULL);
 
    if(size == 0)
       return handle->Init.InitialValue;
+
+   SDeviceAssert(data != NULL);
 
    uint32_t crc = handle->Runtime.UpdateFunction(handle->Runtime.LookupTable, handle->Init.InitialValue, data, size);
    return crc ^ handle->Init.OutputXorValue;
