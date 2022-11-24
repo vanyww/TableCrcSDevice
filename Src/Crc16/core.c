@@ -4,6 +4,8 @@
 #include "SDeviceCore/errors.h"
 #include "SDeviceCore/heap.h"
 
+#include <limits.h>
+
 #define __LOOKUP_TABLE_LENGTH 256
 #define __UINT16_MSB(value) (value & 0x8000)
 
