@@ -56,7 +56,7 @@ __SDEVICE_CREATE_HANDLE_DECLARATION(TableCrc32, _init, _context, _outerNameNode)
 {
    SDeviceAssert(_init != NULL);
 
-   __SDEVICE_INIT_DATA(TableCrc32) *init = _init;
+   const __SDEVICE_INIT_DATA(TableCrc32) *init = _init;
    __SDEVICE_HANDLE(TableCrc32) *handle = SDeviceMalloc(sizeof(__SDEVICE_HANDLE(TableCrc32)));
 
    handle->Init = *init;
