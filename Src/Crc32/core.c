@@ -11,6 +11,8 @@
 
 static void GenerateCrc32Table(uint32_t polynomial, bool isReverse, uint32_t *lookupTable)
 {
+   SDeviceDebugAssert(lookupTable != NULL);
+
    for(size_t byteValue = 0; byteValue < __LOOKUP_TABLE_LENGTH; byteValue++)
    {
       uint32_t crc = isReverse ? TableCrcSDeviceReverseUInt32Bits(byteValue) : ((uint32_t)byteValue) << 24;
@@ -24,6 +26,9 @@ static void GenerateCrc32Table(uint32_t polynomial, bool isReverse, uint32_t *lo
 
 static uint32_t UpdateCrc32(const uint32_t *lookupTable, uint32_t crc, const void *data, size_t size)
 {
+   SDeviceDebugAssert(data != NULL);
+   SDeviceDebugAssert(lookupTable != NULL);
+
    const uint8_t *bytes = data;
 
    for(; size > 0; size--)
@@ -37,6 +42,9 @@ static uint32_t UpdateCrc32(const uint32_t *lookupTable, uint32_t crc, const voi
 
 static uint32_t UpdateReverseCrc32(const uint32_t *lookupTable, uint32_t crc, const void *data, size_t size)
 {
+   SDeviceDebugAssert(data != NULL);
+   SDeviceDebugAssert(lookupTable != NULL);
+
    const uint8_t *bytes = data;
 
    for(; size > 0; size--)
