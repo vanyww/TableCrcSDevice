@@ -11,6 +11,8 @@
 
 static void GenerateCrc8Table(uint8_t polynomial, bool isReverse, uint8_t *lookupTable)
 {
+   SDeviceDebugAssert(lookupTable != NULL);
+
    for(size_t byteValue = 0; byteValue < __LOOKUP_TABLE_LENGTH; byteValue++)
    {
       uint8_t crc = isReverse ? TableCrcSDeviceReverseUInt8Bits(byteValue) : byteValue;
@@ -24,6 +26,9 @@ static void GenerateCrc8Table(uint8_t polynomial, bool isReverse, uint8_t *looku
 
 static uint8_t UpdateCrc8(const uint8_t *lookupTable, uint8_t crc, const void *data, size_t size)
 {
+   SDeviceDebugAssert(data != NULL);
+   SDeviceDebugAssert(lookupTable != NULL);
+
    const uint8_t *bytes = data;
 
    for(; size > 0; size--)
@@ -43,7 +48,7 @@ __SDEVICE_CREATE_HANDLE_DECLARATION(TableCrc8, _init, _context, _outerNameNode)
 {
    SDeviceAssert(_init != NULL);
 
-   __SDEVICE_INIT_DATA(TableCrc8) *init = _init;
+   const __SDEVICE_INIT_DATA(TableCrc8) *init = _init;
    __SDEVICE_HANDLE(TableCrc8) *handle = SDeviceMalloc(sizeof(__SDEVICE_HANDLE(TableCrc8)));
 
    handle->Init = *init;

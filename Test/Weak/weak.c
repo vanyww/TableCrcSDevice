@@ -14,6 +14,11 @@ void _SDeviceProcessAssertFail(char *file, int line)
    AssertFailedCalled = true;
 }
 
+void _SDeviceProcessDebugAssertFail(char *file, int line)
+{
+   AssertFailedCalled = true;
+}
+
 void _SDeviceProcessUnhandledThrow(const void *_handle)
 {
    LastUnhandledThrowHandle = _handle;
