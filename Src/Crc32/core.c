@@ -15,12 +15,12 @@ static void GenerateCrc32Table(uint32_t polynomial, bool isReverse, uint32_t *lo
 
    for(size_t byteValue = 0; byteValue < __LOOKUP_TABLE_LENGTH; byteValue++)
    {
-      uint32_t crc = isReverse ? TableCrcSDeviceReverseUInt32Bits(byteValue) : ((uint32_t)byteValue) << 24;
+      uint32_t crc = isReverse ? TableCrcSDeviceInternalReverseUInt32Bits(byteValue) : ((uint32_t)byteValue) << 24;
 
       for(size_t bit = 0; bit < CHAR_BIT; bit++)
          crc = (__UINT32_MSB(crc) != 0) ? (crc << 1) ^ polynomial : crc << 1;
 
-      lookupTable[byteValue] = isReverse ? TableCrcSDeviceReverseUInt32Bits(crc) : crc;
+      lookupTable[byteValue] = isReverse ? TableCrcSDeviceInternalReverseUInt32Bits(crc) : crc;
    }
 }
 
