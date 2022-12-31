@@ -26,6 +26,7 @@ static void GenerateCrc32Table(uint32_t polynomial, bool isReverse, uint32_t *lo
 
 static uint32_t UpdateCrc32(const uint32_t *lookupTable, uint32_t crc, const void *data, size_t size)
 {
+   SDeviceDebugAssert(size != 0);
    SDeviceDebugAssert(data != NULL);
    SDeviceDebugAssert(lookupTable != NULL);
 
@@ -42,6 +43,7 @@ static uint32_t UpdateCrc32(const uint32_t *lookupTable, uint32_t crc, const voi
 
 static uint32_t UpdateReverseCrc32(const uint32_t *lookupTable, uint32_t crc, const void *data, size_t size)
 {
+   SDeviceDebugAssert(size != 0);
    SDeviceDebugAssert(data != NULL);
    SDeviceDebugAssert(lookupTable != NULL);
 

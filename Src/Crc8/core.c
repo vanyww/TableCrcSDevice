@@ -26,6 +26,7 @@ static void GenerateCrc8Table(uint8_t polynomial, bool isReverse, uint8_t *looku
 
 static uint8_t UpdateCrc8(const uint8_t *lookupTable, uint8_t crc, const void *data, size_t size)
 {
+   SDeviceDebugAssert(size != 0);
    SDeviceDebugAssert(data != NULL);
    SDeviceDebugAssert(lookupTable != NULL);
 
