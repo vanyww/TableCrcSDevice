@@ -15,17 +15,18 @@ static void GenerateCrc8Table(uint8_t polynomial, bool isReverse, uint8_t *looku
 
    for(size_t byteValue = 0; byteValue < __LOOKUP_TABLE_LENGTH; byteValue++)
    {
-      uint8_t crc = isReverse ? TableCrcSDeviceReverseUInt8Bits(byteValue) : byteValue;
+      uint8_t crc = isReverse ? TableCrcSDeviceInternalReverseUInt8Bits(byteValue) : byteValue;
 
       for(size_t bit = 0; bit < CHAR_BIT; bit++)
          crc = (__UINT8_MSB(crc) != 0) ? (crc << 1) ^ polynomial : crc << 1;
 
-      lookupTable[byteValue] = isReverse ? TableCrcSDeviceReverseUInt8Bits(crc) : crc;
+      lookupTable[byteValue] = isReverse ? TableCrcSDeviceInternalReverseUInt8Bits(crc) : crc;
    }
 }
 
 static uint8_t UpdateCrc8(const uint8_t *lookupTable, uint8_t crc, const void *data, size_t size)
 {
+   SDeviceDebugAssert(size != 0);
    SDeviceDebugAssert(data != NULL);
    SDeviceDebugAssert(lookupTable != NULL);
 
@@ -48,8 +49,8 @@ __SDEVICE_CREATE_HANDLE_DECLARATION(TableCrc8, _init, _context, _outerNameNode)
 {
    SDeviceAssert(_init != NULL);
 
-   const __SDEVICE_INIT_DATA(TableCrc8) *init = _init;
-   __SDEVICE_HANDLE(TableCrc8) *handle = SDeviceMalloc(sizeof(__SDEVICE_HANDLE(TableCrc8)));
+   const ThisInitData *init = _init;
+   ThisHandle *handle = SDeviceMalloc(sizeof(ThisHandle));
 
    handle->Init = *init;
    handle->Header = (SDeviceHandleHeader)
@@ -77,8 +78,8 @@ __SDEVICE_DISPOSE_HANDLE_DECLARATION(TableCrc8, _handlePointer)
 {
    SDeviceAssert(_handlePointer != NULL);
 
-   __SDEVICE_HANDLE(TableCrc8) **handlePointer = _handlePointer;
-   __SDEVICE_HANDLE(TableCrc8) *handle = *handlePointer;
+   ThisHandle **handlePointer = _handlePointer;
+   ThisHandle *handle = *handlePointer;
 
    SDeviceAssert(handle != NULL);
 
@@ -91,7 +92,7 @@ __SDEVICE_DISPOSE_HANDLE_DECLARATION(TableCrc8, _handlePointer)
 
 /**********************************************************************************************************************/
 
-uint8_t TableCrc8SDeviceUpdate(__SDEVICE_HANDLE(TableCrc8) *handle, uint8_t crc, const void *data, size_t size)
+uint8_t TableCrc8SDeviceUpdate(ThisHandle *handle, uint8_t crc, const void *data, size_t size)
 {
    SDeviceAssert(handle != NULL);
 
@@ -104,7 +105,7 @@ uint8_t TableCrc8SDeviceUpdate(__SDEVICE_HANDLE(TableCrc8) *handle, uint8_t crc,
    return crc ^ handle->Init.OutputXorValue;
 }
 
-uint8_t TableCrc8SDeviceCompute(__SDEVICE_HANDLE(TableCrc8) *handle, const void *data, size_t size)
+uint8_t TableCrc8SDeviceCompute(ThisHandle *handle, const void *data, size_t size)
 {
    SDeviceAssert(handle != NULL);
 

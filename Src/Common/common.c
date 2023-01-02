@@ -2,7 +2,7 @@
 
 #include "SDeviceCore/common.h"
 
-uint32_t TableCrcSDeviceReverseUInt32Bits(uint32_t value)
+uint32_t TableCrcSDeviceInternalReverseUInt32Bits(uint32_t value)
 {
    uint32_t mask;
 
@@ -29,12 +29,12 @@ uint32_t TableCrcSDeviceReverseUInt32Bits(uint32_t value)
    return value;
 }
 
-uint16_t TableCrcSDeviceReverseUInt16Bits(uint16_t value)
+uint16_t TableCrcSDeviceInternalReverseUInt16Bits(uint16_t value)
 {
-   return TableCrcSDeviceReverseUInt32Bits(value) >> (__BIT_SIZEOF(uint32_t) - __BIT_SIZEOF(uint16_t));
+   return TableCrcSDeviceInternalReverseUInt32Bits(value) >> (__BIT_SIZEOF(uint32_t) - __BIT_SIZEOF(uint16_t));
 }
 
-uint8_t TableCrcSDeviceReverseUInt8Bits(uint8_t value)
+uint8_t TableCrcSDeviceInternalReverseUInt8Bits(uint8_t value)
 {
-   return TableCrcSDeviceReverseUInt32Bits(value) >> (__BIT_SIZEOF(uint32_t) - __BIT_SIZEOF(uint8_t));
+   return TableCrcSDeviceInternalReverseUInt32Bits(value) >> (__BIT_SIZEOF(uint32_t) - __BIT_SIZEOF(uint8_t));
 }
