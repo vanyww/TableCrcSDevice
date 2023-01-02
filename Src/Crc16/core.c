@@ -66,8 +66,8 @@ __SDEVICE_CREATE_HANDLE_DECLARATION(TableCrc16, _init, _context, _outerNameNode)
 {
    SDeviceAssert(_init != NULL);
 
-   const __SDEVICE_INIT_DATA(TableCrc16) *init = _init;
-   __SDEVICE_HANDLE(TableCrc16) *handle = SDeviceMalloc(sizeof(__SDEVICE_HANDLE(TableCrc16)));
+   const ThisInitData *init = _init;
+   ThisHandle *handle = SDeviceMalloc(sizeof(ThisHandle));
 
    handle->Init = *init;
    handle->Header = (SDeviceHandleHeader)
@@ -97,8 +97,8 @@ __SDEVICE_DISPOSE_HANDLE_DECLARATION(TableCrc16, _handlePointer)
 {
    SDeviceAssert(_handlePointer != NULL);
 
-   __SDEVICE_HANDLE(TableCrc16) **handlePointer = _handlePointer;
-   __SDEVICE_HANDLE(TableCrc16) *handle = *handlePointer;
+   ThisHandle **handlePointer = _handlePointer;
+   ThisHandle *handle = *handlePointer;
 
    SDeviceAssert(handle != NULL);
 
@@ -111,7 +111,7 @@ __SDEVICE_DISPOSE_HANDLE_DECLARATION(TableCrc16, _handlePointer)
 
 /**********************************************************************************************************************/
 
-uint16_t TableCrc16SDeviceUpdate(__SDEVICE_HANDLE(TableCrc16) *handle, uint16_t crc, const void *data, size_t size)
+uint16_t TableCrc16SDeviceUpdate(ThisHandle *handle, uint16_t crc, const void *data, size_t size)
 {
    SDeviceAssert(handle != NULL);
 
@@ -124,7 +124,7 @@ uint16_t TableCrc16SDeviceUpdate(__SDEVICE_HANDLE(TableCrc16) *handle, uint16_t 
    return crc ^ handle->Init.OutputXorValue;
 }
 
-uint16_t TableCrc16SDeviceCompute(__SDEVICE_HANDLE(TableCrc16) *handle, const void *data, size_t size)
+uint16_t TableCrc16SDeviceCompute(ThisHandle *handle, const void *data, size_t size)
 {
    SDeviceAssert(handle != NULL);
 
