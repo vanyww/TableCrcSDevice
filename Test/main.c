@@ -23,7 +23,7 @@ struct
    { TestTableCrc32SDeviceXfer, "32/XFER" },
 };
 
-const size_t TestFunctionsCount = __LENGTHOF(TestFunctions);
+const size_t TestFunctionsCount = LENGTHOF(TestFunctions);
 
 int main(void)
 {
