@@ -4,18 +4,18 @@
 
 /* version ************************************************************************************************************/
 
-#if (__SDEVICE_CORE_VERSION_MAJOR != 4) || (__SDEVICE_CORE_VERSION_MINOR < 5)
+#if (SDEVICE_CORE_VERSION_MAJOR != 5) || (SDEVICE_CORE_VERSION_MINOR < 0)
 #error SDevice core version is incorrect.
 #endif
 
-#define __TABLE_CRC_SDEVICE_VERSION_MAJOR 1
-#define __TABLE_CRC_SDEVICE_VERSION_MINOR 3
-#define __TABLE_CRC_SDEVICE_VERSION_PATCH 0
-#define __TABLE_CRC_SDEVICE_CORE_VERSION ((SDeviceVersion)                                                             \
+#define TABLE_CRC_SDEVICE_VERSION_MAJOR 2
+#define TABLE_CRC_SDEVICE_VERSION_MINOR 0
+#define TABLE_CRC_SDEVICE_VERSION_PATCH 0
+#define TABLE_CRC_SDEVICE_CORE_VERSION ((SDeviceVersion)                                                               \
 {                                                                                                                      \
-   .Major = __TABLE_CRC_SDEVICE_VERSION_MAJOR,                                                                         \
-   .Minor = __TABLE_CRC_SDEVICE_VERSION_MINOR,                                                                         \
-   .Patch = __TABLE_CRC_SDEVICE_VERSION_PATCH                                                                          \
+   .Major = TABLE_CRC_SDEVICE_VERSION_MAJOR,                                                                           \
+   .Minor = TABLE_CRC_SDEVICE_VERSION_MINOR,                                                                           \
+   .Patch = TABLE_CRC_SDEVICE_VERSION_PATCH                                                                            \
 })
 
 /**********************************************************************************************************************/
