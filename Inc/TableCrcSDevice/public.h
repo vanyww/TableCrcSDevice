@@ -6,7 +6,7 @@
 #error SDevice core version is incorrect.
 #endif
 
-#define TABLE_CRC_SDEVICE_VERSION_MAJOR 2
+#define TABLE_CRC_SDEVICE_VERSION_MAJOR 3
 #define TABLE_CRC_SDEVICE_VERSION_MINOR 0
 #define TABLE_CRC_SDEVICE_VERSION_PATCH 0
 #define TABLE_CRC_SDEVICE_CORE_VERSION ((SDeviceVersion)                                                               \
