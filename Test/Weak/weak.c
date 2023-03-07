@@ -9,24 +9,24 @@ const void *LastUnhandledThrowHandle;
 const void *LastLogStatusHandle;
 bool AssertFailedCalled;
 
-void _SDeviceProcessAssertFail(char *file, int line)
+void SDeviceProcessAssertFail(char *file, int line)
 {
    AssertFailedCalled = true;
 }
 
-void _SDeviceProcessDebugAssertFail(char *file, int line)
+void SDeviceProcessDebugAssertFail(char *file, int line)
 {
    AssertFailedCalled = true;
 }
 
-void _SDeviceProcessUnhandledThrow(const void *_handle)
+void SDeviceProcessUnhandledThrow(const void *handle)
 {
-   LastUnhandledThrowHandle = _handle;
+   LastUnhandledThrowHandle = handle;
 }
 
-void _SDeviceLogStatus(const void *_handle)
+void SDeviceProcessLogStatus(const void *handle)
 {
-   LastLogStatusHandle = _handle;
+   LastLogStatusHandle = handle;
 }
 
 void * SDeviceMalloc(size_t size)
