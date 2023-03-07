@@ -41,33 +41,30 @@ static uint8_t UpdateCrc8(const uint8_t *lookupTable, uint8_t crc, const void *d
    return crc;
 }
 
-/**********************************************************************************************************************/
-
-SDEVICE_STRING_NAME_DEFINITION(TableCrc8);
-
-SDEVICE_CREATE_HANDLE_DECLARATION(TableCrc8, _init, _context, _outerNameNode)
+SDEVICE_CREATE_HANDLE_DECLARATION(TableCrc8, init, parent, identifier, context)
 {
-   SDeviceAssert(_init != NULL);
+   SDeviceAssert(init != NULL);
 
-   const ThisInitData *init = _init;
+   const ThisInitData *_init = init;
    ThisHandle *handle = SDeviceMalloc(sizeof(ThisHandle));
 
-   handle->Init = *init;
+   handle->Init = *_init;
    handle->Header = (SDeviceHandleHeader)
    {
-      .Context = _context,
-      .NameNode = { .Name = SDEVICE_STRING_NAME(TableCrc8), .OuterNode = _outerNameNode },
+      .Context = context,
+      .ParentHandle = parent,
+      .Identifier = identifier,
       .LatestStatus = TABLE_CRC8_SDEVICE_STATUS_OK
    };
 
-   if(init->ExternalLookupTable != NULL)
+   if(_init->ExternalLookupTable != NULL)
    {
-      handle->Runtime.LookupTable = init->ExternalLookupTable;
+      handle->Runtime.LookupTable = _init->ExternalLookupTable;
    }
    else
    {
       uint8_t *lookupTable = SDeviceMalloc(sizeof(uint8_t) * LOOKUP_TABLE_LENGTH);
-      GenerateCrc8Table(init->Polynomial, init->IsReverse, lookupTable);
+      GenerateCrc8Table(_init->Polynomial, _init->IsReverse, lookupTable);
       handle->Runtime.LookupTable = lookupTable;
    }
 
@@ -89,8 +86,6 @@ SDEVICE_DISPOSE_HANDLE_DECLARATION(TableCrc8, _handlePointer)
    SDeviceFree(*handlePointer);
    *handlePointer = NULL;
 }
-
-/**********************************************************************************************************************/
 
 uint8_t TableCrc8SDeviceUpdate(ThisHandle *handle, uint8_t crc, const void *data, size_t size)
 {

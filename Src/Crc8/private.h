@@ -4,7 +4,7 @@
 
 SDEVICE_RUNTIME_DATA_FORWARD_DECLARATION(TableCrc8);
 
-struct SDEVICE_RUNTIME_DATA(TableCrc8)
+SDEVICE_RUNTIME_DATA_DECLARATION(TableCrc8)
 {
    const uint8_t *LookupTable;
 };
