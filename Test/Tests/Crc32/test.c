@@ -1,6 +1,6 @@
 #include "test.h"
 
-#include "TableCrcSDevice/core_crc32.h"
+#include "TableCrcSDevice/public_crc32.h"
 
 bool TestTableCrc32SDeviceCrc32(void)
 {

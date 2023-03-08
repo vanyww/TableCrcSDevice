@@ -1,6 +1,6 @@
 #include "test.h"
 
-#include "TableCrcSDevice/core_crc8.h"
+#include "TableCrcSDevice/public_crc8.h"
 
 bool TestTableCrc8SDeviceCrc8(void)
 {

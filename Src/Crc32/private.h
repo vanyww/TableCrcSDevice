@@ -1,6 +1,6 @@
 #pragma once
 
-#include "TableCrcSDevice/core_crc32.h"
+#include "TableCrcSDevice/public_crc32.h"
 
 SDEVICE_RUNTIME_DATA_FORWARD_DECLARATION(TableCrc32);
 
