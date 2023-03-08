@@ -58,37 +58,34 @@ static uint32_t UpdateReverseCrc32(const uint32_t *lookupTable, uint32_t crc, co
    return crc;
 }
 
-/**********************************************************************************************************************/
-
-SDEVICE_STRING_NAME_DEFINITION(TableCrc32);
-
-SDEVICE_CREATE_HANDLE_DECLARATION(TableCrc32, _init, _context, _outerNameNode)
+SDEVICE_CREATE_HANDLE_DECLARATION(TableCrc32, init, parent, identifier, context)
 {
-   SDeviceAssert(_init != NULL);
+   SDeviceAssert(init != NULL);
 
-   const ThisInitData *init = _init;
+   const ThisInitData *_init = init;
    ThisHandle *handle = SDeviceMalloc(sizeof(ThisHandle));
 
-   handle->Init = *init;
+   handle->Init = *_init;
    handle->Header = (SDeviceHandleHeader)
    {
-      .Context = _context,
-      .NameNode = { .Name = SDEVICE_STRING_NAME(TableCrc32), .OuterNode = _outerNameNode },
+      .Context = context,
+      .ParentHandle = parent,
+      .Identifier = identifier,
       .LatestStatus = TABLE_CRC32_SDEVICE_STATUS_OK
    };
 
-   if(init->ExternalLookupTable != NULL)
+   if(_init->ExternalLookupTable != NULL)
    {
-      handle->Runtime.LookupTable = init->ExternalLookupTable;
+      handle->Runtime.LookupTable = _init->ExternalLookupTable;
    }
    else
    {
       uint32_t *lookupTable = SDeviceMalloc(sizeof(uint32_t) * LOOKUP_TABLE_LENGTH);
-      GenerateCrc32Table(init->Polynomial, init->IsReverse, lookupTable);
+      GenerateCrc32Table(_init->Polynomial, _init->IsReverse, lookupTable);
       handle->Runtime.LookupTable = lookupTable;
    }
 
-   handle->Runtime.UpdateFunction = (init->IsReverse) ? UpdateReverseCrc32 : UpdateCrc32;
+   handle->Runtime.UpdateFunction = (_init->IsReverse) ? UpdateReverseCrc32 : UpdateCrc32;
 
    return handle;
 }
@@ -108,8 +105,6 @@ SDEVICE_DISPOSE_HANDLE_DECLARATION(TableCrc32, _handlePointer)
    SDeviceFree(*handlePointer);
    *handlePointer = NULL;
 }
-
-/**********************************************************************************************************************/
 
 uint32_t TableCrc32SDeviceUpdate(ThisHandle *handle, uint32_t crc, const void *data, size_t size)
 {
