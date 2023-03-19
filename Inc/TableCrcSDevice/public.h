@@ -15,3 +15,5 @@
    .Minor = TABLE_CRC_SDEVICE_VERSION_MINOR,                                                                           \
    .Patch = TABLE_CRC_SDEVICE_VERSION_PATCH                                                                            \
 })
+
+#define TABLE_CRC_SDEVICE_LOOKUP_TABLE_LENGTH 256

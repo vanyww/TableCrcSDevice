@@ -6,14 +6,13 @@
 
 #include <limits.h>
 
-#define LOOKUP_TABLE_LENGTH 256
 #define UINT8_MSB(value) (value & 0x80)
 
 static void GenerateCrc8Table(uint8_t polynomial, bool isReverse, uint8_t *lookupTable)
 {
    SDeviceDebugAssert(lookupTable != NULL);
 
-   for(size_t byteValue = 0; byteValue < LOOKUP_TABLE_LENGTH; byteValue++)
+   for(size_t byteValue = 0; byteValue < TABLE_CRC_SDEVICE_LOOKUP_TABLE_LENGTH; byteValue++)
    {
       uint8_t crc = isReverse ? TableCrcSDeviceInternalReverseUInt8Bits(byteValue) : byteValue;
 
@@ -65,7 +64,7 @@ SDEVICE_CREATE_HANDLE_DECLARATION(TableCrc8, init, parent, identifier, context)
    }
    else
    {
-      uint8_t *lookupTable = SDeviceMalloc(sizeof(uint8_t) * LOOKUP_TABLE_LENGTH);
+      uint8_t *lookupTable = SDeviceMalloc(sizeof(uint8_t) * TABLE_CRC_SDEVICE_LOOKUP_TABLE_LENGTH);
       GenerateCrc8Table(_init->Polynomial, _init->IsReverse, lookupTable);
       handle->Runtime.LookupTable = lookupTable;
    }
