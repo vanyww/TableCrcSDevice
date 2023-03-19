@@ -71,20 +71,20 @@ SDEVICE_CREATE_HANDLE_DECLARATION(TableCrc8, init, parent, identifier, context)
    return handle;
 }
 
-SDEVICE_DISPOSE_HANDLE_DECLARATION(TableCrc8, _handlePointer)
+SDEVICE_DISPOSE_HANDLE_DECLARATION(TableCrc8, handlePointer)
 {
-   SDeviceAssert(_handlePointer != NULL);
+   SDeviceAssert(handlePointer != NULL);
 
-   ThisHandle **handlePointer = _handlePointer;
-   ThisHandle *handle = *handlePointer;
+   ThisHandle **_handlePointer = handlePointer;
+   ThisHandle *handle = *_handlePointer;
 
    SDeviceAssert(handle != NULL);
 
    if(handle->Init.ExternalLookupTable == NULL)
       SDeviceFree((void *)handle->Runtime.LookupTable);
 
-   SDeviceFree(*handlePointer);
-   *handlePointer = NULL;
+   SDeviceFree(handle);
+   *_handlePointer = NULL;
 }
 
 uint8_t TableCrc8SDeviceUpdate(ThisHandle *handle, uint8_t crc, const void *data, size_t size)
