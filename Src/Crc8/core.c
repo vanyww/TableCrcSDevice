@@ -48,6 +48,8 @@ SDEVICE_CREATE_HANDLE_DECLARATION(TableCrc8, init, parent, identifier, context)
    const ThisInitData *_init = init;
    ThisHandle *handle = SDeviceMalloc(sizeof(ThisHandle));
 
+   SDeviceAssert(handle != NULL);
+
    handle->Init = *_init;
    handle->Header = (SDeviceHandleHeader)
    {
