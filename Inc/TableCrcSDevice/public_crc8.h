@@ -1,7 +1,8 @@
 #pragma once
 
+#include "TableCrcSDevice/public.h"
+
 #include <stdbool.h>
-#include <TableCrcSDevice/public.h>
 
 SDEVICE_HANDLE_FORWARD_DECLARATION(TableCrc8);
 SDEVICE_INIT_DATA_FORWARD_DECLARATION(TableCrc8);
