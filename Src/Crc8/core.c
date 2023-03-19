@@ -6,14 +6,13 @@
 
 #include <limits.h>
 
-#define LOOKUP_TABLE_LENGTH 256
 #define UINT8_MSB(value) (value & 0x80)
 
 static void GenerateCrc8Table(uint8_t polynomial, bool isReverse, uint8_t *lookupTable)
 {
    SDeviceDebugAssert(lookupTable != NULL);
 
-   for(size_t byteValue = 0; byteValue < LOOKUP_TABLE_LENGTH; byteValue++)
+   for(size_t byteValue = 0; byteValue < TABLE_CRC_SDEVICE_LOOKUP_TABLE_LENGTH; byteValue++)
    {
       uint8_t crc = isReverse ? TableCrcSDeviceInternalReverseUInt8Bits(byteValue) : byteValue;
 
@@ -48,6 +47,8 @@ SDEVICE_CREATE_HANDLE_DECLARATION(TableCrc8, init, parent, identifier, context)
    const ThisInitData *_init = init;
    ThisHandle *handle = SDeviceMalloc(sizeof(ThisHandle));
 
+   SDeviceAssert(handle != NULL);
+
    handle->Init = *_init;
    handle->Header = (SDeviceHandleHeader)
    {
@@ -63,7 +64,7 @@ SDEVICE_CREATE_HANDLE_DECLARATION(TableCrc8, init, parent, identifier, context)
    }
    else
    {
-      uint8_t *lookupTable = SDeviceMalloc(sizeof(uint8_t) * LOOKUP_TABLE_LENGTH);
+      uint8_t *lookupTable = SDeviceMalloc(sizeof(uint8_t) * TABLE_CRC_SDEVICE_LOOKUP_TABLE_LENGTH);
       GenerateCrc8Table(_init->Polynomial, _init->IsReverse, lookupTable);
       handle->Runtime.LookupTable = lookupTable;
    }
@@ -71,20 +72,20 @@ SDEVICE_CREATE_HANDLE_DECLARATION(TableCrc8, init, parent, identifier, context)
    return handle;
 }
 
-SDEVICE_DISPOSE_HANDLE_DECLARATION(TableCrc8, _handlePointer)
+SDEVICE_DISPOSE_HANDLE_DECLARATION(TableCrc8, handlePointer)
 {
-   SDeviceAssert(_handlePointer != NULL);
+   SDeviceAssert(handlePointer != NULL);
 
-   ThisHandle **handlePointer = _handlePointer;
-   ThisHandle *handle = *handlePointer;
+   ThisHandle **_handlePointer = handlePointer;
+   ThisHandle *handle = *_handlePointer;
 
    SDeviceAssert(handle != NULL);
 
    if(handle->Init.ExternalLookupTable == NULL)
       SDeviceFree((void *)handle->Runtime.LookupTable);
 
-   SDeviceFree(*handlePointer);
-   *handlePointer = NULL;
+   SDeviceFree(handle);
+   *_handlePointer = NULL;
 }
 
 uint8_t TableCrc8SDeviceUpdate(ThisHandle *handle, uint8_t crc, const void *data, size_t size)
