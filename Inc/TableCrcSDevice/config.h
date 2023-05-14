@@ -6,6 +6,6 @@
 #error SDevice core version is incorrect.
 #endif
 
-#ifdef TABLE_CRC_SDEVICE_USE_EXTERNAL_CONFIG
+#if defined TABLE_CRC_SDEVICE_USE_EXTERNAL_CONFIG
 #include "table_crc_sdevice_config.h"
 #endif

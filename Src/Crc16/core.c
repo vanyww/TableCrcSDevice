@@ -8,6 +8,8 @@
 
 #define UINT16_MSB(value) (value & 0x8000)
 
+SDEVICE_STRING_NAME_DEFINITION(TableCrc16);
+
 static void GenerateCrc16Table(uint16_t polynomial, bool isReverse, uint16_t *lookupTable)
 {
    SDeviceDebugAssert(lookupTable != NULL);
@@ -57,23 +59,21 @@ static uint16_t UpdateReverseCrc16(const uint16_t *lookupTable, uint16_t crc, co
    return crc;
 }
 
-SDEVICE_CREATE_HANDLE_DECLARATION(TableCrc16, init, parent, identifier, context)
+SDEVICE_CREATE_HANDLE_DECLARATION(TableCrc16, init, owner, identifier, context)
 {
    SDeviceAssert(init != NULL);
 
    const ThisInitData *_init = init;
    ThisHandle *handle = SDeviceMalloc(sizeof(ThisHandle));
-
-   SDeviceAssert(handle != NULL);
-
-   handle->Init = *_init;
    handle->Header = (SDeviceHandleHeader)
    {
       .Context = context,
-      .ParentHandle = parent,
-      .Identifier = identifier,
-      .LatestStatus = TABLE_CRC16_SDEVICE_STATUS_OK
+      .OwnerHandle = owner,
+      .SDeviceStringName = SDEVICE_STRING_NAME(TableCrc16),
+      .LatestStatus = TABLE_CRC16_SDEVICE_STATUS_OK,
+      .Identifier = identifier
    };
+   handle->Init = *_init;
 
    if(_init->ExternalLookupTable != NULL)
    {

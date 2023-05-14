@@ -21,7 +21,9 @@ SDEVICE_INIT_DATA_DECLARATION(TableCrc8)
    bool IsReverse;
 };
 
-SDEVICE_CREATE_HANDLE_DECLARATION(TableCrc8, init, parent, identifier, context);
+SDEVICE_STRING_NAME_DECLARATION(TableCrc8);
+
+SDEVICE_CREATE_HANDLE_DECLARATION(TableCrc8, init, owner, identifier, context);
 SDEVICE_DISPOSE_HANDLE_DECLARATION(TableCrc8, handlePointer);
 
 uint8_t TableCrc8SDeviceUpdate(SDEVICE_HANDLE(TableCrc8) *handle, uint8_t crc, const void *data, size_t size);
