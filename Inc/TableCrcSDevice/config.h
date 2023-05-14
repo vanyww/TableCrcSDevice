@@ -9,3 +9,8 @@
 #if defined TABLE_CRC_SDEVICE_USE_EXTERNAL_CONFIG
 #include "table_crc_sdevice_config.h"
 #endif
+
+#if defined DOXYGEN
+#define TABLE_CRC_SDEVICE_ALLOW_TABLE_GENERATION
+#undef TABLE_CRC_SDEVICE_ALLOW_TABLE_GENERATION
+#endif

@@ -10,6 +10,7 @@
 
 SDEVICE_STRING_NAME_DEFINITION(TableCrc32);
 
+#if defined TABLE_CRC_SDEVICE_ALLOW_TABLE_GENERATION
 static void GenerateCrc32Table(uint32_t polynomial, bool isReverse, uint32_t *lookupTable)
 {
    SDeviceDebugAssert(lookupTable != NULL);
@@ -24,6 +25,7 @@ static void GenerateCrc32Table(uint32_t polynomial, bool isReverse, uint32_t *lo
       lookupTable[byteValue] = isReverse ? TableCrcSDeviceInternalReverseUInt32Bits(crc) : crc;
    }
 }
+#endif
 
 static uint32_t UpdateCrc32(const uint32_t *lookupTable, uint32_t crc, const void *data, size_t size)
 {
@@ -75,6 +77,11 @@ SDEVICE_CREATE_HANDLE_DECLARATION(TableCrc32, init, owner, identifier, context)
    };
    handle->Init = *_init;
 
+#if !defined TABLE_CRC_SDEVICE_ALLOW_TABLE_GENERATION
+   SDeviceAssert(_init->ExternalLookupTable != NULL);
+
+   handle->Runtime.LookupTable = _init->ExternalLookupTable;
+#else
    if(_init->ExternalLookupTable != NULL)
    {
       handle->Runtime.LookupTable = _init->ExternalLookupTable;
@@ -85,6 +92,7 @@ SDEVICE_CREATE_HANDLE_DECLARATION(TableCrc32, init, owner, identifier, context)
       GenerateCrc32Table(_init->Polynomial, _init->IsReverse, lookupTable);
       handle->Runtime.LookupTable = lookupTable;
    }
+#endif
 
    handle->Runtime.UpdateFunction = (_init->IsReverse) ? UpdateReverseCrc32 : UpdateCrc32;
 

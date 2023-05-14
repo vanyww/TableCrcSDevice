@@ -15,7 +15,11 @@ typedef enum
 SDEVICE_INIT_DATA_DECLARATION(TableCrc16)
 {
    const uint16_t *ExternalLookupTable;
+
+#if defined TABLE_CRC_SDEVICE_ALLOW_TABLE_GENERATION
    uint16_t Polynomial;
+#endif
+
    uint16_t InitialValue;
    uint16_t OutputXorValue;
    bool IsReverse;

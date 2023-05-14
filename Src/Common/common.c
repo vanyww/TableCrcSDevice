@@ -2,6 +2,8 @@
 
 #include "SDeviceCore/common.h"
 
+#if defined TABLE_CRC_SDEVICE_ALLOW_TABLE_GENERATION
+
 uint32_t TableCrcSDeviceInternalReverseUInt32Bits(uint32_t value)
 {
    uint32_t mask;
@@ -38,3 +40,5 @@ uint8_t TableCrcSDeviceInternalReverseUInt8Bits(uint8_t value)
 {
    return TableCrcSDeviceInternalReverseUInt32Bits(value) >> (BIT_SIZEOF(uint32_t) - BIT_SIZEOF(uint8_t));
 }
+
+#endif
