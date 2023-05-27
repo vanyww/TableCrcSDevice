@@ -1,6 +1,6 @@
 #pragma once
 
-#include "TableCrcSDevice/public.h"
+#include "TableCrcSDevice/public_base.h"
 
 #include <stdbool.h>
 
