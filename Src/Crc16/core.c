@@ -69,11 +69,11 @@ SDEVICE_CREATE_HANDLE_DECLARATION(TableCrc16, init, owner, identifier, context)
    ThisHandle *handle = SDeviceMalloc(sizeof(ThisHandle));
    handle->Header = (SDeviceHandleHeader)
    {
-      .Context = context,
-      .OwnerHandle = owner,
+      .Context           = context,
+      .OwnerHandle       = owner,
       .SDeviceStringName = SDEVICE_STRING_NAME(TableCrc16),
-      .LatestStatus = TABLE_CRC16_SDEVICE_STATUS_OK,
-      .Identifier = identifier
+      .LatestStatus      = TABLE_CRC16_SDEVICE_STATUS_OK,
+      .Identifier        = identifier
    };
    handle->Init = *_init;
 
