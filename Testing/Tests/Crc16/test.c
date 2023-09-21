@@ -1,6 +1,6 @@
 #include "test.h"
 
-#include "TableCrcSDevice/public_crc16.h"
+#include "TableCrcSDevice/Crc16/public.h"
 
 bool TestTableCrc16SDeviceCcittFalse(void)
 {
