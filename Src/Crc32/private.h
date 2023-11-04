@@ -5,14 +5,14 @@
 #include "SDeviceCore/errors.h"
 
 #define IS_VALID_THIS_HANDLE(handle) (                                                                                 \
-{                                                                                                                      \
-   ThisHandle *_handle = (handle);                                                                                     \
-   _handle != NULL          &&                                                                                         \
-   _handle->Init != NULL    &&                                                                                         \
-   _handle->Runtime != NULL &&                                                                                         \
-   SDeviceCompareIdentityBlocks(SDeviceGetHandleIdentityBlock(_handle),                                                \
-                                &SDEVICE_IDENTITY_BLOCK(TableCrc32));                                                  \
-})
+   {                                                                                                                   \
+      ThisHandle *_handle = (handle);                                                                                  \
+      _handle != NULL          &&                                                                                      \
+      _handle->Init != NULL    &&                                                                                      \
+      _handle->Runtime != NULL &&                                                                                      \
+      SDeviceCompareIdentityBlocks(SDeviceGetHandleIdentityBlock(_handle),                                             \
+                                   &SDEVICE_IDENTITY_BLOCK(TableCrc32));                                               \
+   })
 
 SDEVICE_RUNTIME_DATA_FORWARD_DECLARATION(TableCrc32);
 
