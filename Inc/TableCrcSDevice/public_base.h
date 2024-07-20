@@ -1,7 +1,7 @@
 #pragma once
 
-#include "dependencies_base.h"
 #include "config_base.h"
+#include "dependencies_base.h"
 #include "log_base.h"
 
 #define TABLE_CRC_SDEVICE_VERSION_MAJOR 4
