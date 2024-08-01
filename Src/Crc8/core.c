@@ -26,12 +26,12 @@ static void GenerateCrc8Table(uint8_t polynomial, bool isReverse, uint8_t *looku
 {
    for(size_t idx = 0; idx < TABLE_CRC_SDEVICE_LOOKUP_TABLE_LENGTH; idx++)
    {
-      uint8_t crc = (isReverse) ? $TableCrcSDeviceBaseReverseUInt8Bits(idx) : idx;
+      uint8_t crc = (isReverse) ? TableCrcSDeviceBaseInternalReverseUInt8Bits(idx) : idx;
 
       for(size_t bit = 0; bit < CHAR_BIT; bit++)
          crc = (UINT8_MSB(crc)) ? (crc << 1) ^ polynomial : crc << 1;
 
-      lookupTable[idx] = (isReverse) ? $TableCrcSDeviceBaseReverseUInt8Bits(crc) : crc;
+      lookupTable[idx] = (isReverse) ? TableCrcSDeviceBaseInternalReverseUInt8Bits(crc) : crc;
    }
 }
 #endif

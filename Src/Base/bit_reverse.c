@@ -3,7 +3,7 @@
 #include "SDeviceCore/common.h"
 
 #if TABLE_CRC_SDEVICE_ALLOW_TABLE_GENERATION
-uint32_t $TableCrcSDeviceBaseReverseUInt32Bits(uint32_t value)
+uint32_t TableCrcSDeviceBaseInternalReverseUInt32Bits(uint32_t value)
 {
    uint32_t mask;
 
@@ -30,13 +30,13 @@ uint32_t $TableCrcSDeviceBaseReverseUInt32Bits(uint32_t value)
    return value;
 }
 
-uint16_t $TableCrcSDeviceBaseReverseUInt16Bits(uint16_t value)
+uint16_t TableCrcSDeviceBaseInternalReverseUInt16Bits(uint16_t value)
 {
-   return $TableCrcSDeviceBaseReverseUInt32Bits(value) >> (BIT_SIZEOF(uint32_t) - BIT_SIZEOF(uint16_t));
+   return TableCrcSDeviceBaseInternalReverseUInt32Bits(value) >> (BIT_SIZEOF(uint32_t) - BIT_SIZEOF(uint16_t));
 }
 
-uint8_t $TableCrcSDeviceBaseReverseUInt8Bits(uint8_t value)
+uint8_t TableCrcSDeviceBaseInternalReverseUInt8Bits(uint8_t value)
 {
-   return $TableCrcSDeviceBaseReverseUInt32Bits(value) >> (BIT_SIZEOF(uint32_t) - BIT_SIZEOF(uint8_t));
+   return TableCrcSDeviceBaseInternalReverseUInt32Bits(value) >> (BIT_SIZEOF(uint32_t) - BIT_SIZEOF(uint8_t));
 }
 #endif
