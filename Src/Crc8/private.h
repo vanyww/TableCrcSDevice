@@ -1,6 +1,8 @@
 #pragma once
 
-#include "TableCrcSDevice/public_crc8.h"
+#include "TableCrcSDevice/Crc8/public.h"
+
+#define IS_VALID_THIS_HANDLE(handle) SDEVICE_IS_VALID_HANDLE(TableCrc8, handle)
 
 SDEVICE_RUNTIME_DATA_FORWARD_DECLARATION(TableCrc8);
 
