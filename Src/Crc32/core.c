@@ -2,24 +2,11 @@
 #include "../Base/bit_reverse.h"
 
 #include "SDeviceCore/heap.h"
+#include "SDeviceCore/errors.h"
 
 #include <limits.h>
 
 #define UINT32_MSB(value) (value & 0x80000000)
-
-SDEVICE_IDENTITY_BLOCK_DEFINITION(
-      TableCrc32,
-      ((const SDeviceUuid)
-      {
-         .High = TABLE_CRC32_SDEVICE_UUID_HIGH,
-         .Low  = TABLE_CRC32_SDEVICE_UUID_LOW
-      }),
-      ((const SDeviceVersion)
-      {
-         .Major = TABLE_CRC32_SDEVICE_VERSION_MAJOR,
-         .Minor = TABLE_CRC32_SDEVICE_VERSION_MINOR,
-         .Patch = TABLE_CRC32_SDEVICE_VERSION_PATCH
-      }));
 
 #if TABLE_CRC_SDEVICE_ALLOW_TABLE_GENERATION
 static void GenerateCrc32Table(uint32_t polynomial, bool isReverse, uint32_t *lookupTable)
@@ -52,22 +39,14 @@ static uint32_t UpdateReverseCrc32(const uint32_t *lookupTable, uint32_t crc, co
    return crc;
 }
 
-SDEVICE_CREATE_HANDLE_DECLARATION(TableCrc32, init, owner, identifier, context)
+SDEVICE_CREATE_HANDLE_DECLARATION(TableCrc32, init, context)
 {
    SDeviceAssert(init);
 
    const ThisInitData *_init = init;
    ThisHandle *instance = SDeviceAllocateHandle(sizeof(*instance->Init), sizeof(*instance->Runtime));
 
-   instance->Header = (SDeviceHandleHeader)
-   {
-      .Context       = context,
-      .OwnerHandle   = owner,
-      .IdentityBlock = &SDEVICE_IDENTITY_BLOCK(TableCrc32),
-      .LatestStatus  = TABLE_CRC32_SDEVICE_STATUS_OK,
-      .Identifier    = identifier
-   };
-
+   instance->Context = context;
    *instance->Init = *_init;
 
 #if !TABLE_CRC_SDEVICE_ALLOW_TABLE_GENERATION
@@ -99,7 +78,7 @@ SDEVICE_DISPOSE_HANDLE_DECLARATION(TableCrc32, handlePointer)
    ThisHandle **_handlePointer = handlePointer;
    ThisHandle *handle = *_handlePointer;
 
-   SDeviceAssert(IS_VALID_THIS_HANDLE(handle));
+   SDeviceAssert(handle);
 
    if(!handle->Init->ExternalLookupTable)
    {
@@ -114,7 +93,7 @@ SDEVICE_DISPOSE_HANDLE_DECLARATION(TableCrc32, handlePointer)
 
 uint32_t TableCrc32SDeviceUpdate(ThisHandle *handle, uint32_t crc, const void *value, size_t size)
 {
-   SDeviceAssert(IS_VALID_THIS_HANDLE(handle));
+   SDeviceAssert(handle);
 
    if(size <= 0)
       return crc;
@@ -129,7 +108,7 @@ uint32_t TableCrc32SDeviceUpdate(ThisHandle *handle, uint32_t crc, const void *v
 
 uint32_t TableCrc32SDeviceCompute(ThisHandle *handle, const void *value, size_t size)
 {
-   SDeviceAssert(IS_VALID_THIS_HANDLE(handle));
+   SDeviceAssert(handle);
 
    if(size <= 0)
       return handle->Init->InitialValue;
