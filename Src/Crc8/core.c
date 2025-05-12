@@ -1,45 +1,63 @@
 #include "private.h"
-#include "../Base/bit_reverse.h"
+#include "../bit_reverse.h"
 
 #include "SDeviceCore/heap.h"
-#include "SDeviceCore/errors.h"
+#include "SDeviceCore/assert.h"
 
 #include <limits.h>
 
 #define UINT8_MSB(value) (value & 0x80)
 
 #if TABLE_CRC_SDEVICE_ALLOW_TABLE_GENERATION
-static void GenerateCrc8Table(uint8_t polynomial, bool isReverse, uint8_t *lookupTable)
+static void GenerateCrc8Table(
+      uint8_t  polynomial,
+      bool     isReverse,
+      uint8_t *lookupTable)
 {
    for(size_t idx = 0; idx < TABLE_CRC_SDEVICE_LOOKUP_TABLE_LENGTH; idx++)
    {
-      uint8_t crc = (isReverse) ? TableCrcSDeviceBaseInternalReverseUInt8Bits(idx) : idx;
+      uint8_t crc =
+            (isReverse) ?
+                  TableCrcSDeviceInternalReverseUInt8Bits(idx) :
+                  idx;
 
       for(size_t bit = 0; bit < CHAR_BIT; bit++)
          crc = (UINT8_MSB(crc)) ? (crc << 1) ^ polynomial : crc << 1;
 
-      lookupTable[idx] = (isReverse) ? TableCrcSDeviceBaseInternalReverseUInt8Bits(crc) : crc;
+      lookupTable[idx] =
+            (isReverse) ?
+                  TableCrcSDeviceInternalReverseUInt8Bits(crc) :
+                  crc;
    }
 }
 #endif
 
-static uint8_t UpdateCrc8(const uint8_t *lookupTable, uint8_t crc, const void *value, size_t size)
+static uint8_t UpdateCrc8(
+      const uint8_t *lookupTable,
+      uint8_t        crc,
+      const void    *data,
+      size_t         size)
 {
-   for(const char *bytes = value; size > 0; size--, bytes++)
-      crc = lookupTable[crc ^ (uint8_t)*bytes];
+   for(const uint8_t *bytes = data; size > 0; size--, bytes++)
+      crc = lookupTable[crc ^ *bytes];
 
    return crc;
 }
 
 SDEVICE_CREATE_HANDLE_DECLARATION(TableCrc8, init, context)
 {
-   SDeviceAssert(init);
-
    const ThisInitData *_init = init;
-   ThisHandle *instance = SDeviceAllocateHandle(sizeof(*instance->Init), sizeof(*instance->Runtime));
+
+   SDeviceAssert(_init);
+
+   ThisHandle *instance =
+         SDeviceAllocateHandle(
+               sizeof(*instance->Init),
+               sizeof(*instance->Runtime));
+
+   *instance->Init = *_init;
 
    instance->Context = context;
-   *instance->Init = *_init;
 
 #if !TABLE_CRC_SDEVICE_ALLOW_TABLE_GENERATION
    SDeviceAssert(_init->ExternalLookupTable);
@@ -52,7 +70,10 @@ SDEVICE_CREATE_HANDLE_DECLARATION(TableCrc8, init, context)
    }
    else
    {
-      uint8_t *lookupTable = SDeviceAllocateMemory(sizeof(uint8_t[TABLE_CRC_SDEVICE_LOOKUP_TABLE_LENGTH]));
+      uint8_t *lookupTable =
+            SDeviceAllocateMemory(
+                  sizeof(uint8_t[TABLE_CRC_SDEVICE_LOOKUP_TABLE_LENGTH]));
+
       GenerateCrc8Table(_init->Polynomial, _init->IsReverse, lookupTable);
       instance->Runtime->LookupTable = lookupTable;
    }
@@ -61,52 +82,59 @@ SDEVICE_CREATE_HANDLE_DECLARATION(TableCrc8, init, context)
    return instance;
 }
 
-SDEVICE_DISPOSE_HANDLE_DECLARATION(TableCrc8, handlePointer)
+SDEVICE_DISPOSE_HANDLE_DECLARATION(TableCrc8, this)
 {
-   SDeviceAssert(handlePointer);
+   ThisHandle *_this = this;
 
-   ThisHandle **_handlePointer = handlePointer;
-   ThisHandle *handle = *_handlePointer;
+   SDeviceAssert(_this);
 
-   SDeviceAssert(handle);
+   if(!_this->Init->ExternalLookupTable)
+      SDeviceFreeMemory((void *)_this->Runtime->LookupTable);
 
-   if(!handle->Init->ExternalLookupTable)
-   {
-      SDeviceFreeMemory((void *)handle->Runtime->LookupTable);
-      handle->Runtime->LookupTable = NULL;
-   }
-
-   SDeviceFreeHandle(handle);
-
-   *_handlePointer = NULL;
+   SDeviceFreeHandle(_this);
 }
 
-uint8_t TableCrc8SDeviceUpdate(ThisHandle *handle, uint8_t crc, const void *value, size_t size)
+uint8_t TableCrc8SDeviceUpdate(
+      ThisHandle *this,
+      uint8_t     crc,
+      const void *data,
+      size_t      size)
 {
-   SDeviceAssert(handle);
+   SDeviceAssert(this);
 
    if(size <= 0)
       return crc;
 
-   SDeviceAssert(value);
+   SDeviceAssert(data);
 
-   crc = UpdateCrc8(
-         handle->Runtime->LookupTable, crc ^ handle->Init->OutputXorValue, value, size);
+   crc =
+         UpdateCrc8(
+               this->Runtime->LookupTable,
+               crc ^ this->Init->OutputXorValue,
+               data,
+               size);
 
-   return crc ^ handle->Init->OutputXorValue;
+   return crc ^ this->Init->OutputXorValue;
 }
 
-uint8_t TableCrc8SDeviceCompute(ThisHandle *handle, const void *value, size_t size)
+uint8_t TableCrc8SDeviceCompute(
+      ThisHandle *this,
+      const void *data,
+      size_t      size)
 {
-   SDeviceAssert(handle);
+   SDeviceAssert(this);
 
    if(size <= 0)
-      return handle->Init->InitialValue;
+      return this->Init->InitialValue;
 
-   SDeviceAssert(value);
+   SDeviceAssert(data);
 
-   uint8_t crc = UpdateCrc8(
-         handle->Runtime->LookupTable, handle->Init->InitialValue, value, size);
+   uint8_t crc =
+         UpdateCrc8(
+               this->Runtime->LookupTable,
+               this->Init->InitialValue,
+               data,
+               size);
 
-   return crc ^ handle->Init->OutputXorValue;
+   return crc ^ this->Init->OutputXorValue;
 }

@@ -1,9 +1,10 @@
 #pragma once
 
-#include "TableCrcSDevice/public_base.h"
-
 #include "config.h"
 #include "dependencies.h"
+#include "../public.h"
+
+#include <stdint.h>
 
 #define TABLE_CRC8_SDEVICE_VERSION_MAJOR TABLE_CRC_SDEVICE_VERSION_MAJOR
 #define TABLE_CRC8_SDEVICE_VERSION_MINOR TABLE_CRC_SDEVICE_VERSION_MINOR
@@ -29,7 +30,15 @@ SDEVICE_INIT_DATA_DECLARATION(TableCrc8)
 };
 
 SDEVICE_CREATE_HANDLE_DECLARATION(TableCrc8, init, context);
-SDEVICE_DISPOSE_HANDLE_DECLARATION(TableCrc8, handlePointer);
+SDEVICE_DISPOSE_HANDLE_DECLARATION(TableCrc8, this);
 
-uint8_t TableCrc8SDeviceUpdate(SDEVICE_HANDLE(TableCrc8) *handle, uint8_t crc, const void *value, size_t size);
-uint8_t TableCrc8SDeviceCompute(SDEVICE_HANDLE(TableCrc8) *handle, const void *value, size_t size);
+uint8_t TableCrc8SDeviceUpdate(
+      SDEVICE_HANDLE(TableCrc8) *this,
+      uint8_t                    crc,
+      const void                *data,
+      size_t                     size);
+
+uint8_t TableCrc8SDeviceCompute(
+      SDEVICE_HANDLE(TableCrc8) *this,
+      const void                *data,
+      size_t                     size);
