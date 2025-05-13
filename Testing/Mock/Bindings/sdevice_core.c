@@ -1,16 +1,11 @@
 #include "sdevice_core.h"
 
-#include "SDeviceCore/common.h"
-
 #include "unity_fixture.h"
 
 #include <stdlib.h>
 #include <stdio.h>
 
 #define ASSERT_FAIL_FORMAT "Assert failed on file (%s) line (%d)"
-#define PANIC_THROWN_FORMAT "Thrown panic "
-
-#define ENUM_TO_STRING(enum) #enum
 
 AssertFailHandler ThisAssertFailHandler;
 
@@ -26,7 +21,7 @@ void ResetAssertFailHandler(void)
 
 void * SDeviceAllocateMemory(size_t size)
 {
-   return malloc(size);
+   return (size <= 0) ? NULL : malloc(size);
 }
 
 void SDeviceFreeMemory(void *pointer)
