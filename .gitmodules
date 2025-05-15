@@ -1,3 +1,6 @@
 [submodule "sdevicecore"]
 	path = Submodules/sdevicecore
 	url = ../sdevicecore.git
+[submodule "unity"]
+	path = Testing/Unity
+	url = ../forks/unity.git

@@ -1,54 +1,64 @@
-#include "test.h"
-
 #include "TableCrcSDevice/Crc32/public.h"
 
-bool TestTableCrc32SDeviceCrc32(void)
+#include "unity_fixture.h"
+
+static SDEVICE_HANDLE(TableCrc32) *Handle;
+static SDEVICE_INIT_DATA(TableCrc32) HandleInitArray[] =
 {
-   SDEVICE_INIT_DATA(TableCrc32) init = { NULL, 0x04C11DB7, 0xFFFFFFFF, 0xFFFFFFFF, true };
-   __attribute__((cleanup(SDEVICE_DISPOSE_HANDLE(TableCrc32)))) SDEVICE_HANDLE(TableCrc32) *handle =
-            SDEVICE_CREATE_HANDLE(TableCrc32)(&init, NULL, 0, NULL);
+   { NULL, 0x04C11DB7, 0xFFFFFFFF, 0xFFFFFFFF, true  },
+   { NULL, 0x04C11DB7, 0xFFFFFFFF, 0xFFFFFFFF, false },
+   { NULL, 0x000000AF, 0x00000000, 0x00000000, false }
+};
 
-   uint32_t crc;
+TEST_GROUP(TableCrc32);
 
-   crc = TableCrc32SDeviceCompute(handle, "12345", 5);
-   crc = TableCrc32SDeviceUpdate(handle, crc, "6789", 4);
+TEST_SETUP(TableCrc32)
+{
+   static unsigned int idx = 0;
 
-   if(crc != 0xCBF43926)
-      return false;
+   Handle = SDEVICE_CREATE_HANDLE(TableCrc32)(&HandleInitArray[idx], NULL);
 
-   return true;
+   idx++;
 }
 
-bool TestTableCrc32SDeviceBzip2(void)
+TEST_TEAR_DOWN(TableCrc32)
 {
-   SDEVICE_INIT_DATA(TableCrc32) init = { NULL, 0x04C11DB7, 0xFFFFFFFF, 0xFFFFFFFF, false };
-   __attribute__((cleanup(SDEVICE_DISPOSE_HANDLE(TableCrc32)))) SDEVICE_HANDLE(TableCrc32) *handle =
-            SDEVICE_CREATE_HANDLE(TableCrc32)(&init, NULL, 0, NULL);
-
-   uint32_t crc;
-
-   crc = TableCrc32SDeviceCompute(handle, "12345", 5);
-   crc = TableCrc32SDeviceUpdate(handle, crc, "6789", 4);
-
-   if(crc != 0xFC891918)
-      return false;
-
-   return true;
+   SDEVICE_DISPOSE_HANDLE(TableCrc32)(Handle);
 }
 
-bool TestTableCrc32SDeviceXfer(void)
+TEST(TableCrc32, Crc32)
 {
-   SDEVICE_INIT_DATA(TableCrc32) init = { NULL, 0x000000AF, 0x00000000, 0x00000000, false };
-   __attribute__((cleanup(SDEVICE_DISPOSE_HANDLE(TableCrc32)))) SDEVICE_HANDLE(TableCrc32) *handle =
-            SDEVICE_CREATE_HANDLE(TableCrc32)(&init, NULL, 0, NULL);
-
    uint32_t crc;
 
-   crc = TableCrc32SDeviceCompute(handle, "12345", 5);
-   crc = TableCrc32SDeviceUpdate(handle, crc, "6789", 4);
+   crc = TableCrc32SDeviceCompute(Handle, "12345", 5);
+   crc = TableCrc32SDeviceUpdate(Handle, crc, "6789", 4);
 
-   if(crc != 0xBD0BE338)
-      return false;
+   TEST_ASSERT_EQUAL_UINT32(0xCBF43926, crc);
+}
 
-   return true;
+TEST(TableCrc32, Bzip2)
+{
+   uint32_t crc;
+
+   crc = TableCrc32SDeviceCompute(Handle, "12345", 5);
+   crc = TableCrc32SDeviceUpdate(Handle, crc, "6789", 4);
+
+   TEST_ASSERT_EQUAL_UINT32(0xFC891918, crc);
+}
+
+TEST(TableCrc32, Xfer)
+{
+   uint32_t crc;
+
+   crc = TableCrc32SDeviceCompute(Handle, "12345", 5);
+   crc = TableCrc32SDeviceUpdate(Handle, crc, "6789", 4);
+
+   TEST_ASSERT_EQUAL_UINT32(0xBD0BE338, crc);
+}
+
+TEST_GROUP_RUNNER(TableCrc32)
+{
+   RUN_TEST_CASE(TableCrc32, Crc32);
+   RUN_TEST_CASE(TableCrc32, Bzip2);
+   RUN_TEST_CASE(TableCrc32, Xfer);
 }

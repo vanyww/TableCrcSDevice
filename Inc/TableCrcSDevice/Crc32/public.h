@@ -1,14 +1,10 @@
 #pragma once
 
-#include "TableCrcSDevice/public_base.h"
-
 #include "config.h"
 #include "dependencies.h"
-#include "log.h"
+#include "../public.h"
 
-/* 9ED83EE0-58A2-11EE-ABD5-A12738C9216A */
-#define TABLE_CRC32_SDEVICE_UUID_HIGH 0x9ED83EE058A211EE
-#define TABLE_CRC32_SDEVICE_UUID_LOW  0xABD5A12738C9216A
+#include <stdint.h>
 
 #define TABLE_CRC32_SDEVICE_VERSION_MAJOR TABLE_CRC_SDEVICE_VERSION_MAJOR
 #define TABLE_CRC32_SDEVICE_VERSION_MINOR TABLE_CRC_SDEVICE_VERSION_MINOR
@@ -30,10 +26,16 @@ SDEVICE_INIT_DATA_DECLARATION(TableCrc32)
    bool IsReverse;
 };
 
-SDEVICE_IDENTITY_BLOCK_DECLARATION(TableCrc32);
+SDEVICE_CREATE_HANDLE_DECLARATION(TableCrc32, init, context);
+SDEVICE_DISPOSE_HANDLE_DECLARATION(TableCrc32, this);
 
-SDEVICE_CREATE_HANDLE_DECLARATION(TableCrc32, init, owner, identifier, context);
-SDEVICE_DISPOSE_HANDLE_DECLARATION(TableCrc32, handlePointer);
+uint32_t TableCrc32SDeviceUpdate(
+      SDEVICE_HANDLE(TableCrc32) *this,
+      uint32_t                    crc,
+      const void                 *data,
+      size_t                      size);
 
-uint32_t TableCrc32SDeviceUpdate(SDEVICE_HANDLE(TableCrc32) *handle, uint32_t crc, const void *value, size_t size);
-uint32_t TableCrc32SDeviceCompute(SDEVICE_HANDLE(TableCrc32) *handle, const void *value, size_t size);
+uint32_t TableCrc32SDeviceCompute(
+      SDEVICE_HANDLE(TableCrc32) *this,
+      const void                 *data,
+      size_t                      size);
